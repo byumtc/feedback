@@ -104,5 +104,6 @@ export declare class Feedback {
     private _showSending;
     private _showSent;
     private _showError;
-    private _mergeObjects;
+    private _isObject;
+    private _mergeDeep;
 }
