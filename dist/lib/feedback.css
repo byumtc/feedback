@@ -46,7 +46,7 @@
         margin: 0px; }
     #feedback-js div.fb-form-container form input[type="email"] {
       font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-      height: 20px;
+      height: 35px;
       border: none;
       box-sizing: border-box;
       box-shadow: none;
@@ -67,7 +67,7 @@
         color: #bdbdbd; }
     #feedback-js div.fb-form-container form textarea {
       font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-      height: 176px;
+      height: 161px;
       border: none;
       box-sizing: border-box;
       box-shadow: none;
