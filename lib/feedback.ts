@@ -263,8 +263,8 @@ export class Feedback {
     headers.append('Content-Type', 'application/json');
 
     const data = {
-      email: this._form[0].value,
-      description: this._form[1].value,
+      email: (this._form[0] as HTMLInputElement).value,
+      description: (this._form[1] as HTMLTextAreaElement).value,
       screenshot: this._screenshotCanvas.toDataURL()
     };
 

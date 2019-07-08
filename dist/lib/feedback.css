@@ -44,9 +44,30 @@
         line-height: 56px;
         padding: 0px 16px;
         margin: 0px; }
+    #feedback-js div.fb-form-container form input[type="email"] {
+      font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+      height: 20px;
+      border: none;
+      box-sizing: border-box;
+      box-shadow: none;
+      color: #212121;
+      flex-grow: 1;
+      font-style: normal;
+      font-variant: normal;
+      font-weight: 400;
+      font-stretch: normal;
+      font-size: 16px;
+      line-height: normal;
+      max-width: 100%;
+      outline: none;
+      padding: 18px 16px 0px;
+      resize: none;
+      width: 100%; }
+      #feedback-js div.fb-form-container form input[type="email"]::-webkit-input-placeholder, #feedback-js div.fb-form-container form input[type="email"]:-ms-input-placeholder, #feedback-js div.fb-form-container form input[type="email"]::-moz-placeholder {
+        color: #bdbdbd; }
     #feedback-js div.fb-form-container form textarea {
       font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-      height: 196px;
+      height: 176px;
       border: none;
       box-sizing: border-box;
       box-shadow: none;
