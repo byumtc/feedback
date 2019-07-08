@@ -192,7 +192,9 @@ export class Feedback {
   private _uncheckedPath = `M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z`;
 
   constructor(options?: FeedbackOptions, html2canvasOptions?: HTML2CanvasOptions) {
-    this._options = this._mergeObjects(this._options, options);
+    if (options) {
+      this._options = this._mergeDeep(this._options, options);
+    }
 
     if (html2canvasOptions) {
       this._html2canvasOptions = {
@@ -963,39 +965,25 @@ export class Feedback {
     this._formContainer.appendChild(container);
   }
 
+  private _isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+  }
 
-  private _mergeObjects = <T extends object = object>(target: T, ...sources: T[]): T => {
-    if (!sources || !sources.length) {
-      return target;
-    }
-
+  private _mergeDeep(target, ...sources) {
+    if (!sources.length) return target;
     const source = sources.shift();
-    if (source === undefined) {
-      return target;
-    }
 
-    const isObject = (item: any): boolean => {
-      return item !== null && typeof item === 'object';
-    };
-
-    const isMergeableObject = (item): boolean => {
-      return isObject(item) && !Array.isArray(item);
-    };
-
-    if (isMergeableObject(target) && isMergeableObject(source)) {
-      Object.keys(source).forEach(function(key: string) {
-        if (isMergeableObject(source[key])) {
-          if (!target[key]) {
-            target[key] = {};
-          }
-          this._mergeObjects(target[key], source[key]);
+    if (this._isObject(target) && this._isObject(source)) {
+      for (const key in source) {
+        if (this._isObject(source[key])) {
+          if (!target[key]) Object.assign(target, { [key]: {} });
+          this._mergeDeep(target[key], source[key]);
         } else {
-          target[key] = source[key];
+          Object.assign(target, { [key]: source[key] });
         }
-      });
+      }
     }
 
-    return this._mergeObjects(target, ...sources);
-  };
-
+    return this._mergeDeep(target, ...sources);
+  }
 }
