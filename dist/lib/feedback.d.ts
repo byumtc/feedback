@@ -78,6 +78,7 @@ export declare class Feedback {
     private _createForm;
     private _createCanvas;
     private _resize;
+    private _createEmail;
     private _createTextarea;
     private _createCheckboxContainer;
     private _createScreenshotContainer;
@@ -103,4 +104,5 @@ export declare class Feedback {
     private _showSending;
     private _showSent;
     private _showError;
+    private _mergeObjects;
 }

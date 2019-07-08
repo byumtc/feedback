@@ -19,6 +19,7 @@ class Feedback {
                 buttonDefault: '',
             },
             texts: {
+                email: 'Enter your email address.',
                 describe: 'Describe your issue or share your ideas.',
                 title: 'Send feedback',
                 screenshot: 'Include screenshot',
@@ -307,9 +308,36 @@ class Feedback {
             this._helpersContainer.style.left = `${x}px`;
             this._helpersContainer.style.top = `${y}px`;
         };
-        if (options) {
-            this._options = Object.assign({}, this._options, options);
-        }
+        this._mergeObjects = (target, ...sources) => {
+            if (!sources || !sources.length) {
+                return target;
+            }
+            const source = sources.shift();
+            if (source === undefined) {
+                return target;
+            }
+            const isObject = (item) => {
+                return item !== null && typeof item === 'object';
+            };
+            const isMergeableObject = (item) => {
+                return isObject(item) && !Array.isArray(item);
+            };
+            if (isMergeableObject(target) && isMergeableObject(source)) {
+                Object.keys(source).forEach(function (key) {
+                    if (isMergeableObject(source[key])) {
+                        if (!target[key]) {
+                            target[key] = {};
+                        }
+                        this._mergeObjects(target[key], source[key]);
+                    }
+                    else {
+                        target[key] = source[key];
+                    }
+                });
+            }
+            return this._mergeObjects(target, ...sources);
+        };
+        this._mergeObjects(this._options, options);
         if (html2canvasOptions) {
             this._html2canvasOptions = Object.assign({}, this._html2canvasOptions, html2canvasOptions);
         }
@@ -347,7 +375,8 @@ class Feedback {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const data = {
-            description: this._form[0].nodeValue,
+            email: this._form[0].nodeValue,
+            description: this._form[1].nodeValue,
             screenshot: this._screenshotCanvas.toDataURL()
         };
         fetch(this._options.endpoint, {
@@ -396,6 +425,7 @@ class Feedback {
         this._formContainer = container;
         const form = document.createElement('form');
         form.appendChild(this._createHeader());
+        form.appendChild(this._createEmail());
         form.appendChild(this._createTextarea());
         form.appendChild(this._createCheckboxContainer());
         if (this._state.includeScreenshot) {
@@ -420,6 +450,12 @@ class Feedback {
         this._ctx = canvas.getContext('2d');
         this._resetCanvas();
         return canvas;
+    }
+    _createEmail() {
+        const email = document.createElement('input');
+        email.type = 'email';
+        email.placeholder = this._options.texts.email;
+        return email;
     }
     _createTextarea() {
         const textarea = document.createElement('textarea');

@@ -102,6 +102,7 @@ export class Feedback {
       buttonDefault: '',
     },
     texts: {
+      email: 'Enter your email address.',
       describe: 'Describe your issue or share your ideas.',
       title: 'Send feedback',
       screenshot: 'Include screenshot',
@@ -191,12 +192,7 @@ export class Feedback {
   private _uncheckedPath = `M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z`;
 
   constructor(options?: FeedbackOptions, html2canvasOptions?: HTML2CanvasOptions) {
-    if (options) {
-      this._options = {
-        ...this._options,
-        ...options
-      };
-    }
+    this._options = this._mergeObjects(this._options, options);
 
     if (html2canvasOptions) {
       this._html2canvasOptions = {
@@ -265,7 +261,8 @@ export class Feedback {
     headers.append('Content-Type', 'application/json');
 
     const data = {
-      description: this._form[0].nodeValue,
+      email: this._form[0].nodeValue,
+      description: this._form[1].nodeValue,
       screenshot: this._screenshotCanvas.toDataURL()
     };
 
@@ -369,6 +366,7 @@ export class Feedback {
 
     const form = document.createElement('form');
     form.appendChild(this._createHeader());
+    form.appendChild(this._createEmail());
     form.appendChild(this._createTextarea());
     form.appendChild(this._createCheckboxContainer());
 
@@ -406,6 +404,13 @@ export class Feedback {
     this._helpersContainer.style.width = `${width}px`;
     this._helpersContainer.style.height = `${height}px`;
     this._redraw();
+  }
+
+  private _createEmail(): HTMLInputElement {
+    const email = document.createElement('input');
+    email.type = 'email';
+    email.placeholder = this._options.texts.email;
+    return email;
   }
 
   private _createTextarea(): HTMLTextAreaElement {
@@ -957,4 +962,40 @@ export class Feedback {
     this._errorContainer = container;
     this._formContainer.appendChild(container);
   }
+
+
+  private _mergeObjects = <T extends object = object>(target: T, ...sources: T[]): T => {
+    if (!sources || !sources.length) {
+      return target;
+    }
+
+    const source = sources.shift();
+    if (source === undefined) {
+      return target;
+    }
+
+    const isObject = (item: any): boolean => {
+      return item !== null && typeof item === 'object';
+    };
+
+    const isMergeableObject = (item): boolean => {
+      return isObject(item) && !Array.isArray(item);
+    };
+
+    if (isMergeableObject(target) && isMergeableObject(source)) {
+      Object.keys(source).forEach(function(key: string) {
+        if (isMergeableObject(source[key])) {
+          if (!target[key]) {
+            target[key] = {};
+          }
+          this._mergeObjects(target[key], source[key]);
+        } else {
+          target[key] = source[key];
+        }
+      });
+    }
+
+    return this._mergeObjects(target, ...sources);
+  };
+
 }
