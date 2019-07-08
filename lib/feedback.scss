@@ -53,6 +53,33 @@
         }
       }
 
+      input[type="email"] {
+        &::-webkit-input-placeholder,
+        &:-ms-input-placeholder,
+        &::-moz-placeholder {
+          color: rgb(189, 189, 189);
+        }
+
+        font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+        height: 20px;
+        border: none;
+        box-sizing: border-box;
+        box-shadow: none;
+        color: rgb(33, 33, 33);
+        flex-grow: 1;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 400;
+        font-stretch: normal;
+        font-size: 16px;
+        line-height: normal;
+        max-width: 100%;
+        outline: none;
+        padding: 18px 16px 0px;
+        resize: none;
+        width: 100%;
+      }
+
       textarea {
         &::-webkit-input-placeholder,
         &:-ms-input-placeholder,
@@ -61,7 +88,7 @@
         }
 
         font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-        height: 196px;
+        height: 176px;
         border: none;
         box-sizing: border-box;
         box-shadow: none;
