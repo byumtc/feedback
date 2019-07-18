@@ -58,12 +58,15 @@ export declare class Feedback {
     private _helperElements;
     private _helpers;
     private _helperIdx;
+    private _deviceInfo;
+    private _additionalInfo;
     private _drawOptionsPos;
     private _checkedColor;
     private _uncheckedColor;
     private _checkedPath;
     private _uncheckedPath;
     constructor(options?: FeedbackOptions, html2canvasOptions?: HTML2CanvasOptions);
+    openWithInfo(deviceInfo: any, additionalInfo: any): void;
     open(): void;
     close: () => void;
     private _reset;

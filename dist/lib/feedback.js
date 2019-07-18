@@ -20,7 +20,9 @@ class Feedback {
             },
             texts: {
                 email: 'Enter your email address.',
+                emailreq: 'Email is required.',
                 describe: 'Describe your issue or share your ideas.',
+                descreq: 'Description of your issue is required.',
                 title: 'Send feedback',
                 screenshot: 'Include screenshot',
                 cancel: 'cancel',
@@ -65,6 +67,8 @@ class Feedback {
         this._helperElements = [];
         this._helpers = [];
         this._helperIdx = 0;
+        this._deviceInfo = null;
+        this._additionalInfo = null;
         this._drawOptionsPos = {
             startX: 0,
             startY: 0,
@@ -315,6 +319,11 @@ class Feedback {
             this._html2canvasOptions = Object.assign({}, this._html2canvasOptions, html2canvasOptions);
         }
     }
+    openWithInfo(deviceInfo, additionalInfo) {
+        this._deviceInfo = deviceInfo;
+        this._additionalInfo = additionalInfo;
+        this.open();
+    }
     open() {
         if (!this._state.isOpen) {
             this._state.isOpen = true;
@@ -343,6 +352,16 @@ class Feedback {
         return root;
     }
     _send() {
+        if (!this._form[0].value) {
+            this._form[0].placeholder = this._options.texts.emailreq;
+            this._form[0].focus();
+            return;
+        }
+        if (!this._form[1].value) {
+            this._form[1].placeholder = this._options.texts.descreq;
+            this._form[1].focus();
+            return;
+        }
         this._state.sending = true;
         this._showSending();
         const headers = new Headers();
@@ -350,12 +369,14 @@ class Feedback {
         const data = {
             email: this._form[0].value,
             description: this._form[1].value,
-            screenshot: this._screenshotCanvas.toDataURL()
+            screenshot: this._screenshotCanvas.toDataURL(),
+            deviceInfo: this._deviceInfo,
+            additionalInfo: this._additionalInfo,
         };
         fetch(this._options.endpoint, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         })
             .then(resp => {
             if (resp.ok) {
