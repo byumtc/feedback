@@ -46,6 +46,7 @@ export interface HTML2CanvasOptions {
   scrollY?: number;
   windowWidth?: number;
   windowHeight?: number;
+	ignoreElements?: any;
 }
 
 interface State {
@@ -129,7 +130,8 @@ export class Feedback {
   };
 
   private _html2canvasOptions: HTML2CanvasOptions = {
-    allowTaint: true
+		allowTaint: true,
+		ignoreElements: (node) => ('shadowRoot' in node); 
   };
 
   private _initState: State = {
