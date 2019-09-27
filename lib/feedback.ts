@@ -32,6 +32,7 @@ export interface HTML2CanvasOptions {
   backgroundColor?: string;
   canvas?: HTMLCanvasElement;
   foreignObjectRendering?: boolean;
+	ignoreElements?: any;
   imageTimeout?: number;
   logging?: boolean;
   proxy?: string;
@@ -46,7 +47,6 @@ export interface HTML2CanvasOptions {
   scrollY?: number;
   windowWidth?: number;
   windowHeight?: number;
-	ignoreElements?: any;
 }
 
 interface State {
@@ -131,7 +131,6 @@ export class Feedback {
 
   private _html2canvasOptions: HTML2CanvasOptions = {
 		allowTaint: true,
-		ignoreElements: (node) => ('shadowRoot' in node); 
   };
 
   private _initState: State = {
